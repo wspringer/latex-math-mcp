@@ -1,0 +1,28 @@
+name: ci
+
+# Every test runs the bundled wasm engine — nothing beyond Node is needed.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [22, 24]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci
+      - run: npm run build
+      - name: Bundled engine matches its pin
+        run: node -e "import('./dist/engine.js').then(m => m.Engine.load()).then(e => console.log('engine', e.pin.version, e.pin.revision.slice(0,7)))"
+      - run: npm test

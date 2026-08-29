@@ -1,0 +1,41 @@
+name: Release to npm
+
+# Triggered when the Knope Bot's release PR (always from branch
+# `knope/release`) is merged into main. The bot has already updated
+# package.json + CHANGELOG.md and created the tag + GitHub release; this
+# workflow publishes the package to npm via OIDC trusted publishing — no
+# token exists anywhere; GitHub proves the workflow's identity to npm with
+# a short-lived signed claim, and provenance attestation is automatic.
+# (Configured on npmjs.com: package Settings -> Trusted Publisher.)
+#
+# The engine is bundled in the package (engine/latex-math.wasm, pinned in
+# engine.json), so the tests need nothing beyond Node.
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write # npm provenance via OIDC
+
+jobs:
+  publish:
+    if: github.event.pull_request.merged == true && github.head_ref == 'knope/release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24 # bundles npm >= 11.5.1, required for trusted publishing
+          registry-url: https://registry.npmjs.org
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+
+      - run: npm publish --access public

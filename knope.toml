@@ -1,0 +1,26 @@
+[package]
+versioned_files = ["package.json"]
+changelog = "CHANGELOG.md"
+
+# The Knope Bot GitHub App (https://github.com/marketplace/knope-bot)
+# reads this and keeps an open release PR on the `knope/release` branch
+# with the next version + changelog. Merging that PR creates the tag +
+# GitHub release; .github/workflows/release.yml then publishes to npm.
+[bot.releases]
+enabled = true
+
+[github]
+owner = "wspringer"
+repo = "latex-math-mcp"
+
+# Change files are the only release-semantics source — commit subjects
+# (including squash-merge PR titles) no longer bump versions or write
+# changelog entries.
+[changes]
+ignore_conventional_commits = true
+
+# The bot's "Require changes to be documented" check accepts a change file
+# only (conventional commits are ignored above). PRs that change nothing
+# for npm users — CI, dev config, comments — carry this label instead.
+[bot.checks]
+skip_labels = ["not user facing"]

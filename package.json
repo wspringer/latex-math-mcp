@@ -1,0 +1,60 @@
+{
+  "name": "latex-math-mcp",
+  "version": "0.0.0",
+  "description": "MCP server that typesets LaTeX math with OpenType MATH fonts into placeable PDF (CMYK / spot colour), SVG and PNG, with baseline metrics",
+  "type": "module",
+  "license": "MIT",
+  "author": "Wilfred Springer <wilfred@eastpole.nl>",
+  "homepage": "https://github.com/wspringer/latex-math-mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wspringer/latex-math-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wspringer/latex-math-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "latex",
+    "math",
+    "opentype-math",
+    "pdf",
+    "cmyk",
+    "spot-color",
+    "indesign",
+    "claude",
+    "claude-code"
+  ],
+  "bin": {
+    "latex-math-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "engine",
+    "engine.json",
+    "fonts",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
+    "zod": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

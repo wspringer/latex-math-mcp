@@ -94,12 +94,52 @@ own cut and the script levels are still scaled by the text font's
 is always present. Font files never leave your machine: only subsetted glyphs end up
 in the PDF, which is what every font licence allows for documents.
 
-## What you get
+## Example
 
-`\color{accent}{\sum_{i=1}^{n}} \frac{x_i^2}{\sqrt{1+e^{-x_i}}}` as an 11 pt display
-formula comes back as a PDF whose sum sign is a PANTONE 300 C separation, with
-`{"width": 61.249, "height": 29.759, "depth": 12.353, "ascent": 17.406, "em": 11, "ex": 5.203}`
-in points, and a preview PNG in the tool result.
+Ask Claude for the Laplace transform, highlighted in the house colour:
+
+> Give me the Laplace transform definition as a PDF for the brochure, with the
+> result in our accent colour.
+
+Claude writes the LaTeX and calls the tool:
+
+```json
+{
+  "latex": "\\mathcal{L}\\{f(t)\\} = \\int_0^\\infty f(t)\\, e^{-st}\\, \\mathrm{d}t = \\color{accent}{F(s)}",
+  "format": "pdf",
+  "unit": "pt",
+  "font_size": 11,
+  "palette": { "accent": { "spot": { "name": "PANTONE 300 C", "cmyk": [1, 0.44, 0, 0] } } },
+  "output_dir": "brochure",
+  "name": "laplace"
+}
+```
+
+and gets back the file, the numbers to place it, and a preview it can look at:
+
+```json
+{
+  "ok": true,
+  "path": "/…/brochure/laplace.pdf",
+  "format": "pdf",
+  "font": "stix2",
+  "unit": "pt",
+  "width": 161.104,
+  "height": 36.747,
+  "depth": 15.925,
+  "ascent": 20.822,
+  "em": 11,
+  "ex": 5.203
+}
+```
+
+The PDF has STIX Two Math embedded as a subset, everything in 100 % K except `F(s)`,
+which is a *PANTONE 300 C* separation — InDesign lists it as a swatch on placing. To sit
+the formula on a text line, shift it down by `depth` (15.925 pt) from the baseline.
+
+The same call with `"format": "svg"` and an sRGB accent gives this (rendered at 20 px):
+
+<img src="https://raw.githubusercontent.com/wspringer/latex-math-mcp/main/docs/example.svg" alt="The Laplace transform definition, typeset in STIX Two Math, with F(s) in blue" width="430">
 
 ## Licence
 

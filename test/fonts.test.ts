@@ -4,10 +4,13 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { FontCatalog, resolveProfile } from "../src/fonts.js";
 
+/** `path.resolve` on the platform, so expectations hold on Windows too. */
+const abs = (base: string, ...p: string[]) => path.resolve(base, ...p);
+
 describe("font profiles", () => {
   it("a single file serves every level", () => {
     const p = resolveProfile("one", "Math.otf", "/base");
-    expect(p.files).toEqual(["/base/Math.otf"]);
+    expect(p.files).toEqual([abs("/base", "Math.otf")]);
     expect(p.levels).toEqual([0, 0, 0, 0]);
   });
 
@@ -23,16 +26,16 @@ describe("font profiles", () => {
       "/f",
     );
     expect(p.files).toEqual([
-      "/f/MinionMath-Subh.otf",
-      "/f/MinionMath-Regular.otf",
-      "/f/MinionMath-Capt.otf",
-      "/f/MinionMath-Tiny.otf",
+      abs("/f", "MinionMath-Subh.otf"),
+      abs("/f", "MinionMath-Regular.otf"),
+      abs("/f", "MinionMath-Capt.otf"),
+      abs("/f", "MinionMath-Tiny.otf"),
     ]);
     expect(p.levels).toEqual([0, 1, 2, 3]);
 
     // text + script only: display uses text, scriptscript uses script.
     const q = resolveProfile("two", { text: "R.otf", script: "C.otf" }, "/f");
-    expect(q.files).toEqual(["/f/R.otf", "/f/C.otf"]);
+    expect(q.files).toEqual([abs("/f", "R.otf"), abs("/f", "C.otf")]);
     expect(q.levels).toEqual([0, 0, 1, 1]);
     expect(() => resolveProfile("bad", { script: "C.otf" }, "/f")).toThrow(/needs at least/);
   });

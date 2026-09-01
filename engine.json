@@ -1,10 +1,13 @@
 {
   "repository": "wspringer/latex-math-wasi",
-  "version": "0.1.0",
-  "revision": "072bb50ba76b0ba83cfcb48169ed43abb74e40b6",
-  "tag": null,
+  "version": "0.1.1",
+  "revision": "8a97bdf3146f225e99f0d5bc5d8df144e7031056",
+  "tag": "v0.1.1",
   "file": "engine/latex-math.wasm",
-  "sha256": "e949ffaee1a78466027e734f1a22591169d9e5bbb875fc70da94ba762aa52f78",
-  "vendoredEngine": { "from": "https://github.com/KenyC/ReX", "revision": "aeccdba38f3fa54195c469319b65c423e17a77ae" },
-  "builtBy": "scripts/update-engine.mjs --local (no tagged release yet)"
+  "sha256": "07dc9d2cd8d321a8d97036e3a2a614fa0c0a63303d22ee4905e65c18797a86cf",
+  "vendoredEngine": {
+    "from": "https://github.com/KenyC/ReX",
+    "revision": "aeccdba38f3fa54195c469319b65c423e17a77ae"
+  },
+  "builtBy": "scripts/update-engine.mjs v0.1.1"
 }

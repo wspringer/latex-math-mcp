@@ -1,0 +1,18 @@
+{
+  "version": "0.1.1",
+  "tag": "v0.1.1",
+  "revision": "8a97bdf3146f225e99f0d5bc5d8df144e7031056",
+  "repository": "https://github.com/wspringer/latex-math-wasi",
+  "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+  "engine": { "vendoredFrom": "https://github.com/KenyC/ReX", "revision": "aeccdba38f3fa54195c469319b65c423e17a77ae" },
+  "dependencies": {
+    "ttf-parser": "0.25.1",
+    "pdf-writer": "0.15.0",
+    "subsetter": "0.2.6",
+    "serde_json": "1.0.151"
+  },
+  "targets": {
+    "wasip1": "latex-math-0.1.1-wasip1.wasm",
+    "browser": "latex-math-0.1.1-browser.wasm"
+  }
+}

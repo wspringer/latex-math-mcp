@@ -124,10 +124,10 @@ and gets back the file, the numbers to place it, and a preview it can look at:
   "format": "pdf",
   "font": "stix2",
   "unit": "pt",
-  "width": 161.104,
-  "height": 36.747,
-  "depth": 15.925,
-  "ascent": 20.822,
+  "width": 153.104,
+  "height": 28.747,
+  "depth": 11.925,
+  "ascent": 16.822,
   "em": 11,
   "ex": 5.203
 }
@@ -135,7 +135,7 @@ and gets back the file, the numbers to place it, and a preview it can look at:
 
 The PDF has STIX Two Math embedded as a subset, everything in 100 % K except `F(s)`,
 which is a *PANTONE 300 C* separation — InDesign lists it as a swatch on placing. To sit
-the formula on a text line, shift it down by `depth` (15.925 pt) from the baseline.
+the formula on a text line, shift it down by `depth` (11.925 pt) from the baseline.
 
 The same call with `"format": "svg"` and an sRGB accent gives this (rendered at 20 px):
 

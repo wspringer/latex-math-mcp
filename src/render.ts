@@ -92,10 +92,8 @@ export async function renderMath(
 
   let previewPng: Uint8Array | undefined;
   if (opts.preview) {
-    // The preview is always sRGB: CMYK and spot colours have no PNG meaning,
-    // so it is rendered with the document colour only when they are in play.
-    const previewable = (c?: ColorSpec) => !c || "gray" in c || "rgb" in c;
-    const paletteOk = Object.values(opts.palette ?? {}).every(previewable);
+    // The preview is always sRGB: CMYK and spot colours are approximated with
+    // `toRgb` for the inline image only — the output file keeps the real inks.
     previewPng = engine.render(
       {
         ...base,
@@ -103,8 +101,8 @@ export async function renderMath(
         padding: convert(opts.padding, opts.unit, "px"),
         format: "png",
         scale: 2,
-        color: previewable(opts.color) ? opts.color : undefined,
-        palette: paletteOk ? opts.palette : previewPalette(opts.palette),
+        color: opts.color ? toRgb(opts.color) : undefined,
+        palette: previewPalette(opts.palette),
       },
       fonts,
     );

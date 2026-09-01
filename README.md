@@ -144,5 +144,8 @@ The same call with `"format": "svg"` and an sRGB accent gives this (rendered at 
 ## Licence
 
 MIT. The bundled engine is MIT (latex-math-wasi, with layout code from
-[ReX](https://github.com/KenyC/ReX), MIT). STIX Two Math is under the SIL Open Font
-License 1.1 (`fonts/OFL-STIXTwoMath.txt`).
+[ReX](https://github.com/KenyC/ReX), MIT). Its compiled-in dependencies are all
+permissively licensed — MIT/Apache-2.0 throughout, plus tiny-skia and tiny-skia-path
+(© the tiny-skia authors, BSD-3-Clause); the exact versions are recorded in
+`engine.json` and each engine release's `provenance.json`. STIX Two Math is under the
+SIL Open Font License 1.1 (`fonts/OFL-STIXTwoMath.txt`).

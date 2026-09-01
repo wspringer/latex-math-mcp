@@ -22,10 +22,18 @@ const ENGINE = "engine/latex-math.wasm";
 const sha256 = async (file) => createHash("sha256").update(await readFile(file)).digest("hex");
 const run = (cmd, args, cwd) => execFileSync(cmd, args, { cwd, encoding: "utf8" }).trim();
 
-const [mode, arg] = process.argv.slice(2);
+let [mode, arg] = process.argv.slice(2);
 if (!mode) {
-  console.error("usage: update-engine.mjs <tag> | --local <checkout>");
+  console.error("usage: update-engine.mjs <tag>|latest | --local <checkout>");
   process.exit(2);
+}
+if (mode === "latest") {
+  const res = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
+    headers: { accept: "application/vnd.github+json" },
+  });
+  if (!res.ok) throw new Error(`no latest release on ${REPO} (${res.status})`);
+  mode = (await res.json()).tag_name;
+  console.log(`latest release: ${mode}`);
 }
 
 let pin;

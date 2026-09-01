@@ -1,0 +1,87 @@
+# Trail latex-math-wasi's releases.
+#
+# Weekly: re-bundle the newest release's browser wasm (engine/latex-math.wasm
+# + engine.json + provenance), prove the whole test suite passes with it, and
+# open a PR carrying the new engine and its change file.
+#
+# Verification runs inside this job because PRs opened with GITHUB_TOKEN
+# don't trigger other workflows; set a GH_PAT secret to get CI on the PR too.
+name: trail engine
+
+on:
+  schedule:
+    - cron: "0 8 * * 1" # Mondays
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  trail:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Re-pin to the newest release
+        run: node scripts/update-engine.mjs latest
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Anything new?
+        id: changed
+        run: |
+          if git diff --quiet engine.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "engine.json already at the newest release"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "tag=$(node -p "require('./engine.json').tag")" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Full test suite against the new engine
+        if: steps.changed.outputs.changed == 'true'
+        run: |
+          npm ci
+          npm run build
+          npm test
+
+      - name: Change file
+        if: steps.changed.outputs.changed == 'true'
+        run: |
+          mkdir -p .changeset
+          cat > .changeset/trail-engine.md <<EOF
+          ---
+          default: minor
+          ---
+
+          #### Engine updated to ${{ steps.changed.outputs.tag }}
+
+          The bundled WebAssembly engine now tracks
+          [latex-math-wasi ${{ steps.changed.outputs.tag }}](https://github.com/wspringer/latex-math-wasi/releases/tag/${{ steps.changed.outputs.tag }}).
+          EOF
+
+      - name: Open the pull request
+        if: steps.changed.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          branch: trail/engine
+          add-paths: |
+            engine.json
+            engine/latex-math.wasm
+            engine/provenance.json
+            .changeset/trail-engine.md
+          commit-message: "feat: trail engine to ${{ steps.changed.outputs.tag }}"
+          title: "feat: trail engine to ${{ steps.changed.outputs.tag }}"
+          body: |
+            Re-bundles the wasm engine from
+            [`${{ steps.changed.outputs.tag }}`](https://github.com/wspringer/latex-math-wasi/releases/tag/${{ steps.changed.outputs.tag }}),
+            verified against SHA256SUMS and the full test suite on this runner.
+          labels: engine

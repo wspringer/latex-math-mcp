@@ -1,5 +1,5 @@
 ---
-default: minor
+default: major
 ---
 
 #### First release

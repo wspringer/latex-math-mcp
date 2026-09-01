@@ -1,6 +1,6 @@
 {
   "name": "latex-math-mcp",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "MCP server that typesets LaTeX math with OpenType MATH fonts into placeable PDF (CMYK / spot colour), SVG and PNG, with baseline metrics",
   "type": "module",
   "license": "MIT",
